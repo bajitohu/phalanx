@@ -2,9 +2,7 @@
 #execute as @e[tag=phalanx] at @e[scores={id=0..}] if score @s id = @e[limit=1,sort=nearest] id run scoreboard players add @s r 1
 #execute as @e[tag=phalanx,scores={r=..9}] at @e[scores={id=0..}] if score @s id = @e[limit=1,sort=nearest] id run kill @e[limit=1,sort=nearest]
 #偏差(速:6)
-#execute if entity @e[tag=target] as @e[tag=a] at @e[tag=phalanx] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id positioned ~ ~-100 ~ at @e[tag=target,limit=1,sort=nearest] anchored feet positioned ^ ^ ^ run teleport ~ ~100 ~
 #execute at @e[tag=a] positioned ~ ~-100 ~ run particle minecraft:composter ~ ~ ~
-#execute at @e[tag=b] positioned ~ ~-100 ~ run particle minecraft:bubble ~ ~ ~
 #tellraw @p ["rx1:", {score: {name: "@e[tag=phalanx,limit=1,sort=nearest]", objective: rx}, bold: true}]
 #
 #ra-r=a,ra-rb+5ey=b

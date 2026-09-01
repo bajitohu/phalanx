@@ -51,3 +51,4 @@ scoreboard players set world_score w3 -1
 scoreboard players set world_score w4 0
 
 scoreboard objectives add test dummy
+forceload add -10 -10 10 10
