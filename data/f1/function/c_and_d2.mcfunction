@@ -14,7 +14,8 @@ execute as @e[scores={tar=0..}] run scoreboard players operation @s raz -= @e[li
 #e_r作成(標的のr3~r5に格納),Rotation値を取得 
 execute as @e[scores={tar=0..}] run function f1:c_and_d3
 
-#r.e_rをtarのaaに格納,aaの数値はおかしい
+
+#r.e_rをtarのaaに格納,aaの数値はおかしい<--かけた後に割る順番ミスでオーバーフロー説
 scoreboard players set world_score r 100
 execute as @e[scores={tar=0..}] run scoreboard players operation @s aa = @s rax
 execute as @e[scores={tar=0..}] run scoreboard players operation @s aa *= @s r3
@@ -38,7 +39,7 @@ execute as @e[scores={tar=0..}] run scoreboard players operation @s r *= @s r5
 execute as @e[scores={tar=0..}] run scoreboard players operation @s ab += @s r
 scoreboard players set world_score r2 10000
 execute as @e[scores={tar=0..}] run scoreboard players operation @s ab /= world_score r2
-#r.e_r/v.e_r(符号は反対であることに注意)をtarのtに格納(分母0のときの対処、逆数にした方が良いか？意味論要検討)
+#r.e_r/v.e_r(符号は反対であることに注意)をtarのtに格納
 execute as @e[scores={tar=0..}] run scoreboard players operation @s t = @s aa
 execute as @e[scores={tar=0..,ab=..-1}] run scoreboard players operation @s t /= @s ab
 scoreboard players set world_score r2 -1
@@ -66,8 +67,9 @@ execute as @e[scores={tar=0..}] run scoreboard players operation @s tmp1 > @s tm
 execute as @e[scores={tar=0..}] run scoreboard players add @s tmp1 1
 
 #r.e_r,r.e_r/-v.e_r,e_r.e_dir,abを線形結合-->pr,一旦被りペナルティは無視で進める
-execute as @e[scores={tar=0..}] run scoreboard players operation @s pr = @s aa
-execute as @e[scores={tar=0..}] run scoreboard players operation @s pr *= world_score w1
+execute as @e[scores={tar=0..}] run scoreboard players operation @s tmp2 = @s aa
+execute as @e[scores={tar=0..}] run scoreboard players operation @s tmp2 *= world_score w1
+execute as @e[scores={tar=0..}] run scoreboard players operation @s pr += @s tmp2
 execute as @e[scores={tar=0..,ab=..-1}] run scoreboard players operation @s tmp2 = @s t
 execute as @e[scores={tar=0..,ab=..-1}] run scoreboard players operation @s tmp2 *= world_score w2
 execute as @e[scores={tar=0..,ab=..-1}] run scoreboard players operation @s pr += @s tmp2

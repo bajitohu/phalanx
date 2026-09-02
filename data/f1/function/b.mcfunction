@@ -16,5 +16,7 @@ scoreboard players set @e[tag=new] num 0
 execute as @e[tag=phalanx,tag=new] store result score @s rx run data get entity @s Pos[0] 100000
 execute as @e[tag=phalanx,tag=new] store result score @s ry run data get entity @s Pos[1] 100000
 execute as @e[tag=phalanx,tag=new] store result score @s rz run data get entity @s Pos[2] 100000
+execute as @e[tag=phalanx,tag=new] run scoreboard players set @s v 1000
+execute at @e[tag=phalanx,tag=new] run forceload add ~-6 ~-6 ~6 ~6
 tag @e remove new
 data merge storage _: {_:{left_rotation:{angle:0.0f,axis:[0,0,1]},translation:[0.0f,0.0f,0.0f],right_rotation:[0.7068252f,0.0f,0.0f,0.7073883f],scale:[1.0f,1.0f,1.0f]}}

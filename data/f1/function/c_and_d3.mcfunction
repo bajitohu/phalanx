@@ -11,3 +11,4 @@ scoreboard players operation @s r5 = @e[tag=anow] rz
 scoreboard players operation @s tmp1 = @e[tag=anow] tmp1
 scoreboard players operation @s tmp2 = @e[tag=anow] tmp2
 tag @e remove anow
+execute positioned ~ ~-100 ~ facing entity @s feet if function f1:c_and_d4

@@ -1,12 +1,4 @@
-#破壊判定
-#execute as @e[tag=phalanx] at @e[scores={id=0..}] if score @s id = @e[limit=1,sort=nearest] id run scoreboard players add @s r 1
-#execute as @e[tag=phalanx,scores={r=..9}] at @e[scores={id=0..}] if score @s id = @e[limit=1,sort=nearest] id run kill @e[limit=1,sort=nearest]
-#偏差(速:6)
-#execute at @e[tag=a] positioned ~ ~-100 ~ run particle minecraft:composter ~ ~ ~
-#tellraw @p ["rx1:", {score: {name: "@e[tag=phalanx,limit=1,sort=nearest]", objective: rx}, bold: true}]
-#
 #ra-r=a,ra-rb+5ey=b
-execute as @e[tag=phalanx] run scoreboard players set @s v 1000
 execute as @e[tag=phalanx] run scoreboard players operation @s vk = @s v
 execute as @e[tag=phalanx] run scoreboard players add @s vk 1
 execute as @e[tag=phalanx] run scoreboard players operation @s vk *= @s vk
@@ -2574,6 +2566,14 @@ execute as @e[tag=phalanx] run scoreboard players operation @s r4 -= @s r5
 #execute as @e[tag=phalanx] run scoreboard players operation @s r2 += @s rbx
 #execute as @e[tag=phalanx] run scoreboard players operation @s r3 += @s rby
 #execute as @e[tag=phalanx] run scoreboard players operation @s r4 += @s rbz
+#検証
+#execute as @e[tag=phalanx] run scoreboard players operation @s rbx = @s r2
+#execute as @e[tag=phalanx] run scoreboard players operation @s rby = @s r3
+#execute as @e[tag=phalanx] run scoreboard players operation @s rbz = @s r4
+scoreboard players set world_score tmp1 2
+execute as @e[tag=phalanx] run scoreboard players operation @s r2 /= world_score tmp1
+execute as @e[tag=phalanx] run scoreboard players operation @s r3 /= world_score tmp1
+execute as @e[tag=phalanx] run scoreboard players operation @s r4 /= world_score tmp1
 
 #検証コード
 # execute as @e[tag=phalanx] run scoreboard players operation world_score1 test > @s r2
@@ -2582,14 +2582,14 @@ execute as @e[tag=phalanx] run scoreboard players operation @s r4 -= @s r5
 # execute as @e[tag=phalanx] run scoreboard players operation world_score4 test < @s r3
 # execute as @e[tag=phalanx] run scoreboard players operation world_score5 test > @s r4
 # execute as @e[tag=phalanx] run scoreboard players operation world_score6 test < @s r4
+execute as @e[tag=phalanx] at @e[tag=a] if score @s id = @e[tag=a,limit=1,sort=nearest] id run tag @s add remain
 
 execute if entity @e[scores={tar=0..}] at @e[tag=phalanx,tag=ok] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[0] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r2 += @e[tag=phalanx,limit=1,sort=nearest] rx
 execute if entity @e[scores={tar=0..}] at @e[tag=phalanx,tag=ok] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[1] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r3 += @e[tag=phalanx,limit=1,sort=nearest] ry
 execute if entity @e[scores={tar=0..}] at @e[tag=phalanx,tag=ok] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[2] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r4 += @e[tag=phalanx,limit=1,sort=nearest] rz
 
+execute at @e[tag=remain] unless entity @e[tag=a,distance=..6] run tellraw @p ["x:", {score: {name: "@s", objective: rbx}, bold: true},"\n y:", {score: {name: "@s", objective: rby}, bold: true},"\n z:", {score: {name: "@s", objective: rbx}, bold: true}]
 
-execute as @e[tag=phalanx] at @s run particle minecraft:crit ~ ~-90 ~-60
-execute as @e[tag=a] at @s run particle minecraft:composter ~ ~-90 ~-60
 #本体旋回
 tag @e remove fire
 tag @e remove xp
@@ -2623,11 +2623,10 @@ execute if entity @e[scores={tar=0..}] as @e[tag=fire] at @s positioned ^ ^ ^1 p
 execute as @e[tag=a] at @e[tag=fire] if score @s id = @e[limit=1,sort=nearest] id facing entity @s feet positioned 0.0 0.0 0.0 positioned ^ ^ ^-10 run teleport @s ~ ~ ~ ~ ~
 execute if entity @e[scores={tar=0..}] as @e[tag=a] at @e[tag=fire] if score @s id = @e[tag=fire,limit=1,sort=nearest] id positioned ~ ~-100 ~ run data modify entity @e[tag=newar,limit=1,distance=0.5..1.3] Motion set from entity @s Pos
 #蛇足
-execute if entity @e[scores={tar=0..}] at @e[tag=fire] positioned ~ ~-100 ~ run data modify entity @e[type=arrow,tag=newar,limit=1,distance=0.5..1.3] Owner set from entity @p UUID
+execute if entity @e[scores={tar=0..}] as @e[tag=fire] at @s positioned ~ ~-100 ~ run data modify entity @e[type=arrow,tag=newar,limit=1,distance=0.5..1.3] Owner set from entity @s UUID
 execute if entity @e[scores={tar=0..}] at @e[tag=fire] positioned ^ ^ ^1.5 run particle minecraft:dust_color_transition{from_color:[1.0d, 0.5d, 0.5d],scale:1.5,to_color:[1.0,1.0,1.0]} ~ ~-100 ~
 execute if entity @e[scores={tar=0..}] at @e[tag=fire] positioned ^ ^ ^1.5 positioned ~ ~-100 ~ run playsound minecraft:block.ancient_debris.hit master @a ~ ~ ~ 1 1.3
 execute as @e[tag=a] at @e[tag=phalanx] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id run teleport ~-1 ~ ~
-#execute unless entity @e[tag=target] as @e[tag=b] at @e[tag=a] if score @s id = @e[tag=a,limit=1,sort=nearest] id run teleport ~ ~ ~
 tag @e remove newar
 tag @e remove next
 execute as @e[tag=phalanx] at @s run teleport ~ ~ ~
