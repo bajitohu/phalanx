@@ -1,3 +1,5 @@
+#ここで標的の選定、変更
+function f1:c_and_d
 #ra-r=a,ra-rb+5ey=b
 execute as @e[tag=phalanx] run scoreboard players operation @s vk = @s v
 execute as @e[tag=phalanx] run scoreboard players add @s vk 1
@@ -6,12 +8,15 @@ scoreboard players set world_score tmp2 250000
 execute as @e[tag=phalanx] run scoreboard players operation @s vk -= world_score tmp2
 #tellraw @p ["vk:", {score: {name: "@e[tag=phalanx,limit=1,sort=nearest]", objective: vk}, bold: true}]
 #目標の情報を取得
-execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr store result score @e[tag=phalanx,limit=1,sort=nearest] rax run data get entity @s Pos[0] 100000
-execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr store result score @e[tag=phalanx,limit=1,sort=nearest] ray run data get entity @s Pos[1] 100000
-execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr store result score @e[tag=phalanx,limit=1,sort=nearest] raz run data get entity @s Pos[2] 100000
+execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run tag @s add target
+execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] rax = @s rx
+execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] ray = @s ry
+execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] raz = @s rz
 execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] rbx = @s rbx
 execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] rby = @s rby
 execute at @e[tag=phalanx] as @e[scores={tar=0..}] if score @s tar = @e[tag=phalanx,limit=1,sort=nearest] agmaxpr run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] rbz = @s rbz
+execute if entity @e[tag=a] if entity @e[scores={tar=0..}] unless entity @e[tag=target] run say aa!!
+tag @e remove target
 execute as @e[tag=phalanx] run scoreboard players add @s ray 10000000
 execute unless entity @e[scores={tar=0..}] as @e[tag=phalanx] run scoreboard players operation @s rax = @s rx
 execute unless entity @e[scores={tar=0..}] as @e[tag=phalanx] run scoreboard players operation @s ray = @s ry
@@ -2566,7 +2571,7 @@ execute as @e[tag=phalanx] run scoreboard players operation @s r4 -= @s r5
 #execute as @e[tag=phalanx] run scoreboard players operation @s r2 += @s rbx
 #execute as @e[tag=phalanx] run scoreboard players operation @s r3 += @s rby
 #execute as @e[tag=phalanx] run scoreboard players operation @s r4 += @s rbz
-#検証
+#検証(ここ3行誤ってコメント化-->数値は(0,-500000,0)*nを示した、散発的な時はn=1,連続するとnは増える)
 #execute as @e[tag=phalanx] run scoreboard players operation @s rbx = @s r2
 #execute as @e[tag=phalanx] run scoreboard players operation @s rby = @s r3
 #execute as @e[tag=phalanx] run scoreboard players operation @s rbz = @s r4
@@ -2582,13 +2587,16 @@ execute as @e[tag=phalanx] run scoreboard players operation @s r4 /= world_score
 # execute as @e[tag=phalanx] run scoreboard players operation world_score4 test < @s r3
 # execute as @e[tag=phalanx] run scoreboard players operation world_score5 test > @s r4
 # execute as @e[tag=phalanx] run scoreboard players operation world_score6 test < @s r4
-execute as @e[tag=phalanx] at @e[tag=a] if score @s id = @e[tag=a,limit=1,sort=nearest] id run tag @s add remain
+execute as @e[tag=phalanx] if entity @e[tag=a] run tag @s add remain
 
-execute if entity @e[scores={tar=0..}] at @e[tag=phalanx,tag=ok] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[0] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r2 += @e[tag=phalanx,limit=1,sort=nearest] rx
-execute if entity @e[scores={tar=0..}] at @e[tag=phalanx,tag=ok] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[1] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r3 += @e[tag=phalanx,limit=1,sort=nearest] ry
-execute if entity @e[scores={tar=0..}] at @e[tag=phalanx,tag=ok] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[2] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r4 += @e[tag=phalanx,limit=1,sort=nearest] rz
+execute if entity @e[scores={tar=0..}] at @e[tag=phalanx] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[0] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r2 += @e[tag=phalanx,limit=1,sort=nearest] rx
+execute if entity @e[scores={tar=0..}] at @e[tag=phalanx] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[1] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r3 += @e[tag=phalanx,limit=1,sort=nearest] ry
+execute if entity @e[scores={tar=0..}] at @e[tag=phalanx] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id store result entity @s Pos[2] double 0.00001 run scoreboard players operation @e[tag=phalanx,limit=1,sort=nearest] r4 += @e[tag=phalanx,limit=1,sort=nearest] rz
 
-execute at @e[tag=remain] unless entity @e[tag=a,distance=..6] run tellraw @p ["x:", {score: {name: "@s", objective: rbx}, bold: true},"\n y:", {score: {name: "@s", objective: rby}, bold: true},"\n z:", {score: {name: "@s", objective: rbx}, bold: true}]
+execute at @e[tag=remain] unless entity @e[tag=a,distance=..6] run tellraw @p ["x:", {score: {name: "@e[tag=remain,limit=1]", objective: rbx}, bold: true},"\n y:", {score: {name: "@e[tag=remain,limit=1]", objective: rby}, bold: true},"\n z:", {score: {name: "@e[tag=remain,limit=1]", objective: rbz}, bold: true}]
+execute at @e[tag=remain] unless entity @e[tag=a,distance=..6] run say !
+execute at @e[tag=remain] unless entity @e[tag=a] run say !!!
+tag @e remove remain
 
 #本体旋回
 tag @e remove fire
@@ -2606,7 +2614,7 @@ execute as @e[tag=yp] at @s run teleport @s ~ ~ ~ ~ ~-5
 execute as @e[tag=a] at @e[tag=phalanx] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id positioned ^ ^ ^500 if entity @s[distance=500..] positioned ^ ^ ^-500 positioned ^ ^500 ^ if entity @s[distance=..500] positioned ^ ^-500 ^ run tag @e[tag=phalanx,limit=1,sort=nearest] add ym
 execute as @e[tag=ym] at @s run teleport @s ~ ~ ~ ~ ~5
 execute as @e[tag=a] at @e[tag=phalanx] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id positioned ^ ^ ^500 if entity @s[distance=500..] positioned ^ ^ ^-500 positioned ^ ^500 ^ if entity @s[distance=500..] positioned ^ ^-500 ^ run tag @e[tag=phalanx,limit=1,sort=nearest] add yp
-tag @e[tag=xp,tag=xm,tag=yp,tag=ym] add fire
+tag @e[tag=xp,tag=xm,tag=yp,tag=ym,tag=!oh] add fire
 execute at @e[tag=fire] as @e[tag=a] if score @s id = @e[tag=phalanx,limit=1,sort=nearest] id facing entity @s feet facing ^ ^ ^-1 as @e[tag=fire,limit=1,sort=nearest] run teleport @s ~ ~ ~ ~ ~
 #パーツ移動
 execute store result storage _: _.left_rotation.angle float 0.01 run scoreboard players add world_score rot 25
@@ -2635,6 +2643,5 @@ scoreboard players add @e[tag=ar] r 1
 kill @e[tag=ar,scores={r=1000..}]
 kill @e[tag=ar,nbt={inGround:1b}]
 
-#ここで標的の選定、変更
-function f1:c_and_d
+tag @e remove oh
 tag @e remove ok
